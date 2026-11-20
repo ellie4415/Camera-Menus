@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Nikon Camera Menu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap">
+<style>
+/* Layout: the bay drawn as four glass shelves, each a row of tappable tags in shelf order. One font family, bold or regular only. */
+:root {
+  --bg: #F4F2EC; --surface: #FFFFFF; --ink: #1B1C2E; --muted: #5C5E73;
+  --line: #D9D6CC; --glass: #A9C4C9; --brand: #2E3192; --on-brand: #FFFFFF;
+  --mark: #FFD400; --on-mark: #1B1C2E; --shade: rgba(27,28,46,.55); --nikon: #F8E300;
+  --font: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box }
+html, body { height: 100% }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.35;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+button { font: inherit; color: inherit; cursor: pointer }
+button:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px }
+.wrap { height: 100%; display: flex; flex-direction: column; gap: 10px }
+.top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center }
+h1 { margin: 0 }
+.nk { background: var(--nikon); padding: 10px 16px; line-height: 0 }
+.nk img { height: 34px; width: auto; display: block }
+.ac { height: 54px; width: auto }
+.top .asof { margin-left: auto; font-size: 18px; font-weight: 700; color: var(--ink) }
+.try { margin: 0; font-size: 16px; text-align: center }
+.hl { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 16px }
+.assoc { margin: 0; font-weight: 700; font-size: 16px }
+.asof { color: var(--muted); margin: 0 }
+.bayscroll { flex: 1 1 0; min-height: 0; overflow: auto; border-radius: 6px }
+.bay { --k: 1; min-height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; padding: 12px 18px 10px;
+  border: 10px solid #FBFAF6; background: radial-gradient(120% 90% at 50% 40%, #FFFBEA 0%, #FBEFC6 55%, #EBD9A2 100%); box-shadow: inset 0 0 40px rgba(120,90,20,.25) }
+.shelf { display: grid; grid-template-rows: calc(126px * var(--k)) 11px auto; column-gap: 8px }
+.glass { grid-row: 2; grid-column: 1 / -1; margin: 0 -18px; background: linear-gradient(#DDF3EC, #9FCFC2 45%, #6FAE9F); box-shadow: 0 10px 14px -6px rgba(60,50,10,.45); border-top: 1px solid #F4FFFB }
+.spot { grid-row: 1 / span 3; display: grid; grid-template-rows: subgrid; background: none; border: 0; padding: 0; min-width: 0; color: #1B1C2E; border-radius: 4px }
+.spot:focus-visible { outline: 3px solid #2E3192; outline-offset: 3px }
+.onstand { grid-row: 1; align-self: end; display: flex; flex-direction: column; align-items: center }
+.onstand svg { display: block; max-width: 100% }
+.onstand img { display: block; max-width: 100%; object-fit: contain; margin-bottom: -3px; filter: drop-shadow(0 3px 3px rgba(60,50,10,.35)) }
+.stand { width: 92%; height: calc(22px * var(--k)); background: linear-gradient(#F7C71E, #E0A90A); clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%) }
+.hang { grid-row: 3; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 3px 4px }
+.tag { background: #FFFFFF; color: #1B1C2E; border: 1px solid #C9C6BA; border-top: 0; box-shadow: 0 2px 4px rgba(60,50,10,.25); width: 100%; padding: 5px 3px 6px; text-align: center; font-weight: 700; font-size: 14px; line-height: 1.12; overflow-wrap: anywhere }
+.tag span { display: block; font-weight: 400; font-size: 11px; color: #5C5E73; padding-top: 2px }
+.chip { background: #FFD400; color: #1B1C2E; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 3px; white-space: nowrap }
+.chip.rent { background: #2E3192; color: #FFFFFF }
+.more { background: var(--brand); color: var(--on-brand); border: 0; border-radius: 6px; padding: 12px 18px; font-weight: 700; font-size: 16px }
+.note { color: var(--muted); font-size: 13px; margin: 0 }
+
+dialog { border: 0; border-radius: 10px; background: var(--surface); color: var(--ink); padding: 0; width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px) }
+dialog::backdrop { background: var(--shade) }
+.card { padding: 24px; display: flex; flex-direction: column; gap: 14px }
+.card h2 { font-size: 26px; font-weight: 700; margin: 0; text-wrap: balance }
+.card h2 span { font-weight: 400 }
+.rows { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; font-variant-numeric: tabular-nums; font-size: 17px }
+.rows .now { font-weight: 700; font-size: 30px }
+.rows .nowlabel { font-weight: 700; align-self: end; padding-bottom: 5px }
+.cfgs { display: flex; flex-direction: column; gap: 8px }
+.cfg { border: 1px solid var(--line); border-radius: 6px; background: var(--bg) }
+.cfghead { width: 100%; background: none; border: 0; padding: 12px; display: flex; gap: 16px; justify-content: space-between; align-items: baseline; text-align: left; font-variant-numeric: tabular-nums }
+.cfghead .c { font-weight: 700; font-size: 17px; min-width: 0; overflow-wrap: anywhere }
+.cfghead .colors { display: block; font-weight: 400; font-size: 14px; color: var(--muted); padding-top: 2px }
+.cfghead .n { font-weight: 700; font-size: 22px; white-space: nowrap }
+button.cfghead[aria-expanded="true"] { border-bottom: 1px solid var(--line) }
+.cfgdetail { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 15px }
+div.cfghead + .cfgdetail { padding-top: 0 }
+.cfgdetail p { margin: 0 }
+.cfgdetail b { font-weight: 700 }
+.card { overflow-y: auto; max-height: calc(100vh - 48px) }
+.facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px }
+.opts { display: flex; flex-direction: column; gap: 8px }
+.opts h3 { font-size: 16px; font-weight: 700; margin: 6px 0 0 }
+.opt { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; text-align: left; display: flex; gap: 12px; justify-content: space-between; align-items: baseline; font-variant-numeric: tabular-nums }
+.opt span:first-child { min-width: 0; overflow-wrap: anywhere }
+.opt .p { white-space: nowrap; font-weight: 700 }
+.close { align-self: flex-end; background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 10px 18px; font-weight: 700 }
+.list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto }
+
+#idle { position: fixed; inset: 0; z-index: 20; background: var(--nikon); color: #000; border: 0; width: 100%;
+  display: flex; flex-direction: column; gap: 22px; align-items: center; justify-content: center; text-align: center; padding: 20px 24px 70px }
+#idle .idlelogo img { display: block; width: min(62vw, 95vh); height: auto }
+#idle .idleac { line-height: 0 }
+#idle .idleac img { display: block; height: min(26vh, 240px); width: auto }
+#idle .tap { background: #000; color: var(--nikon); font-weight: 700; font-size: 22px; padding: 12px 24px; border-radius: 6px }
+#idle .ticker { position: absolute; left: 0; right: 0; bottom: 0; background: #000; color: #FFF; overflow: hidden; padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px)); font-size: 17px; font-variant-numeric: tabular-nums }
+#idle .run { display: inline-block; white-space: nowrap; animation: roll 150s linear infinite }
+#idle .run b { font-weight: 700 }
+@keyframes roll { to { transform: translateX(-50%) } }
+@media (prefers-reduced-motion: reduce) { #idle .run { animation: none } }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <h1 class="nk"><img src="img/nikon.png" alt="Nikon"></h1>
+    <button class="more" id="moreBtn" type="button">More Nikon Z lenses</button>
+    <p class="asof" id="asof"></p>
+    <img class="ac" src="img/actioncamera.png" alt="Action Camera">
+  </div>
+  <div class="bayscroll" id="bayBox"><div class="bay" id="bay" aria-label="Nikon display shelves, top to bottom"></div></div>
+  <p class="try">Every camera here can be tried. Ask an associate and we will put it in your hands.</p>
+</div>
+
+<dialog id="itemDlg" aria-labelledby="itemTitle"><div class="card" id="itemCard"></div></dialog>
+<dialog id="moreDlg" aria-labelledby="moreTitle"><div class="card">
+  <h2 id="moreTitle">More Nikon Z lenses</h2>
+  <p class="note">Not on display. Ask us to bring one out or order it in.</p>
+  <div class="list" id="moreList"></div>
+  <button class="close" type="button" data-close>Close</button>
+</div></dialog>
+<button id="idle" type="button" hidden aria-label="Tap for more info">
+  <span class="idlelogo"><img src="img/nikon.png" alt="Nikon"></span>
+  <span class="tap">Tap for more info</span>
+  <span class="idleac"><img src="img/actioncamera-black.png" alt="Action Camera"></span>
+  <span class="ticker"><span class="run" id="ticker"></span></span>
+</button>
+
+<script>
+// Snapshot data. Prices and rentals: layout sheet. Instant savings: Nikon's November sheet. Stock: actioncamera.com on Nov 19.
+// Lens: [shelf, pos, photoKey, tag, fullName, price, savings, savingsWithCamera, "with" wording, rentable, Rocklin qty, Reno qty]
+var LENSES = [
+[2,9,"35mm f/1.7","35mm f/1.7 Micro","NIKKOR Z DX MC 35mm f/1.7",449.95,100,0,"",0,2,1],
+[2,10,"16-50mm f/2.8","16-50mm f/2.8","NIKKOR Z DX 16-50mm f/2.8 VR",899.95,0,0,"",0,1,1],
+[2,11,"50-250mm","50-250mm","NIKKOR Z DX 50-250mm f/4.5-6.3 VR",409.95,0,160,"a Z30, Z50, Z50II or Zfc",0,1,1],
+[2,12,"FTZ II","FTZ II","Mount Adapter FTZ II",299.95,0,150,"a Z camera",1,0,1],
+[3,1,"26mm f/2.8","26mm f/2.8","NIKKOR Z 26mm f/2.8",549.95,100,0,"",0,2,1],
+[3,2,"28mm f/2.8","28mm f/2.8","NIKKOR Z 28mm f/2.8",299.95,70,0,"",0,1,2],
+[3,3,"35mm f/1.4","35mm f/1.4","NIKKOR Z 35mm f/1.4",679.95,100,130,"a ZR body",0,1,1],
+[3,4,"40mm f/2","40mm f/2","NIKKOR Z 40mm f/2",299.95,70,0,"",0,1,1],
+[3,5,"50mm f/2.8","50mm f/2.8 Micro","NIKKOR Z MC 50mm f/2.8",719.95,50,0,"",0,1,0],
+[3,6,"50mm f/1.4","50mm f/1.4","NIKKOR Z 50mm f/1.4",599.95,50,150,"a Z camera",0,2,1],
+[3,7,"50mm f/1.8 S","50mm f/1.8","NIKKOR Z 50mm f/1.8 S",669.95,200,0,"",0,0,1],
+[3,8,"85mm f/1.8 S","85mm f/1.8","NIKKOR Z 85mm f/1.8 S",849.95,100,0,"",0,1,0],
+[3,9,"105mm f/2.8","105mm f/2.8 Micro","NIKKOR Z MC 105mm f/2.8 VR S",1149.95,250,0,"",0,1,1],
+[3,10,"14-30mm f/4 S","14-30mm f/4","NIKKOR Z 14-30mm f/4 S",1399.95,300,0,"",1,0,0],
+[3,11,"14-24mm f/2.8 S","14-24mm f/2.8","NIKKOR Z 14-24mm f/2.8 S",2699.95,800,0,"",1,0,0],
+[4,1,"24-50mm f/4-6.3","24-50mm f/4-6.3","NIKKOR Z 24-50mm f/4-6.3",449.95,0,150,"a Z camera",1,1,0],
+[4,2,"24-70mm f/2.8 S II","24-70mm f/2.8 II","NIKKOR Z 24-70mm f/2.8 S II",2799.95,200,0,"",1,0,1],
+[4,3,"24-120mm f/4 S","24-120mm f/4","NIKKOR Z 24-120mm f/4 S",1149.95,150,250,"a Z camera",0,2,1],
+[4,4,"24-200mm f/4-6.3","24-200mm f/4-6.3","NIKKOR Z 24-200mm f/4-6.3 VR",949.95,100,150,"a Z camera",0,2,1],
+[4,5,"28-75mm f/2.8","28-75mm f/2.8","NIKKOR Z 28-75mm f/2.8",1199.95,200,0,"",0,1,0],
+[4,6,"28-400mm f/4-8","28-400mm f/4-8","NIKKOR Z 28-400mm f/4-8 VR",1449.95,300,0,"",0,2,1],
+[4,7,"70-180mm f/2.8","70-180mm f/2.8","NIKKOR Z 70-180mm f/2.8",1399.95,200,0,"",0,1,0],
+[4,8,"70-200mm f/2.8 S II","70-200mm f/2.8 II","NIKKOR Z 70-200mm f/2.8 VR S II",3199.95,200,0,"",1,0,0],
+[4,9,"100-400mm f/4.5-5.6 S","100-400mm f/4.5-5.6","NIKKOR Z 100-400mm f/4.5-5.6 VR S",2949.95,250,0,"",1,0,0],
+[4,10,"180-600mm f/5.6-6.3","180-600mm f/5.6-6.3","NIKKOR Z 180-600mm f/5.6-6.3 VR",2199.95,100,0,"",1,0,0],
+["N",0,"","","NIKKOR Z DX 12-28mm f/3.5-5.6 PZ VR",399.95,60,110,"a Z30",0,0,1],
+["N",0,"","","NIKKOR Z DX 16-50mm f/3.5-6.3 VR",329.95,0,0,"",0,0,0],
+["N",0,"","","NIKKOR Z DX 18-140mm f/3.5-6.3 VR",679.95,0,200,"a Z30, Z50, Z50II or Zfc",0,0,0],
+["N",0,"","","NIKKOR Z DX 24mm f/1.7",319.95,50,0,"",0,0,1],
+["N",0,"","","NIKKOR Z 17-28mm f/2.8",1299.95,200,0,"",0,0,2],
+["N",0,"","","NIKKOR Z 20mm f/1.8 S",1149.95,100,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 24mm f/1.8 S",1099.95,100,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 35mm f/1.8 S",899.95,150,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 35mm f/1.2 S",2999.95,400,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 40mm f/2 (SE)",329.95,70,100,"a Z camera",0,0,0],
+["N",0,"","","NIKKOR Z 50mm f/1.2 S",2249.95,200,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 85mm f/1.2 S",2999.95,200,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 135mm f/1.8 S Plena",2599.95,400,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 24-70mm f/4 S",1049.95,0,450,"a Z camera",1,0,0],
+["N",0,"","","NIKKOR Z 24-70mm f/2.8 S",2549.95,550,0,"",1,0,0],
+["N",0,"","","NIKKOR Z 24-105mm f/4-7.1",549.95,0,200,"a Z camera",0,0,0],
+["N",0,"","","NIKKOR Z 28-135mm f/4 PZ",2799.95,0,0,"",1,0,0],
+["N",0,"","","NIKKOR Z 120-300mm f/2.8 TC VR S",13999.95,0,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 400mm f/4.5 VR S",3499.95,0,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 400mm f/2.8 TC VR S",14699.95,2000,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 600mm f/6.3 VR S",5199.95,0,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 600mm f/4 TC VR S",16199.95,1500,0,"",0,0,0],
+["N",0,"","","NIKKOR Z 800mm f/6.3 VR S",6999.95,0,0,"",0,0,0],
+["N",0,"","","Z Teleconverter TC-1.4x",589.95,0,0,"",0,1,0],
+["N",0,"","","Z Teleconverter TC-2x",649.95,0,0,"",0,0,1]
+];
+// Camera: [shelf, pos, name, rentable, [ [configuration, price, savings, [ [color, Rocklin qty, Reno qty], ... ]], ... ]]
+// A null quantity means the website has no stock record for it.
+var CAMERAS = [
+[1,1,"Z9",1,[["Body only",5899.95,1100,[["",0,0]]]]],
+[1,2,"Z8",1,[["Body only",4299.95,1100,[["",1,0]]],["with 24-120mm f/4 S",5199.95,1100,[["",0,0]]]]],
+[1,3,"Z7II",1,[["Body only",2099.95,400,[["",0,0]]]]],
+[1,4,"Z6III",1,[["Body only",2699.95,700,[["",0,1]]],["with 24-70mm f/4 S",3299.95,700,[["",0,0]]]]],
+[1,5,"Z5II",0,[["Body only",1849.95,250,[["",2,0]]],["with 24-50mm",2149.95,250,[["",0,0]]],["with 24-200mm",2649.95,250,[["",0,0]]]]],
+[1,6,"Z5II C",0,[["Body only",1399.95,0,[["Black",1,1],["Silver",1,1]]],["with 24-50mm",1699.95,0,[["Black",1,0],["Silver",0,0]]]]],
+[2,1,"Zf",0,[
+  ["Body only",2199.95,200,[["Black",0,0],["Silver",1,0]]],
+  ["Body only",2299.95,200,[["Indigo Blue",0,0],["Sunset Orange",0,0],["Cognac Brown",null,null],["Teal Blue",null,null],["Mauve Pink",null,null],["Moss Green",0,0],["Stone Gray",null,null],["Sepia Brown",null,null]]],
+  ["with 40mm f/2 (SE)",2439.95,200,[["Black",0,0],["Silver",0,0]]],
+  ["with 24-70mm f/4 S",2799.95,200,[["Black",0,0],["Silver",null,null]]]]],
+[2,2,"Zfc",0,[
+  ["Body only",1059.95,300,[["",0,0]]],
+  ["with 16-50mm VR",1199.95,300,[["Black",1,0],["Silver",1,1]]],
+  ["with 16-50mm VR",1299.95,300,[["Chalk Blue",0,0],["Crimson Red",1,0]]],
+  ["with 28mm f/2.8 (SE)",1299.95,300,[["",0,0]]]]],
+[2,3,"Z50II",0,[["Body only",1009.95,50,[["",0,0]]],["with 16-50mm",1149.95,50,[["",2,1]]],["Two lens kit",1399.95,50,[["",1,1]]]]]
+];
+var PHOTOS = {"Z9":"img/01.webp","Z8":"img/02.webp","Z7II":"img/03.webp","Z6III":"img/04.webp","Z5II":"img/05.webp","Z5II C":"img/06.webp","Zf":"img/07.webp","Zfc":"img/08.webp","Z50II":"img/09.webp","35mm f/1.7":"img/10.webp","16-50mm f/2.8":"img/11.webp","50-250mm":"img/12.webp","FTZ II":"img/13.webp","26mm f/2.8":"img/14.webp","28mm f/2.8":"img/15.webp","35mm f/1.4":"img/16.webp","40mm f/2":"img/17.webp","50mm f/2.8":"img/18.webp","50mm f/1.4":"img/19.webp","50mm f/1.8 S":"img/20.webp","85mm f/1.8 S":"img/21.webp","105mm f/2.8":"img/22.webp","14-30mm f/4 S":"img/23.webp","14-24mm f/2.8 S":"img/24.webp","24-50mm f/4-6.3":"img/25.webp","24-70mm f/2.8 S II":"img/26.webp","24-120mm f/4 S":"img/27.webp","24-200mm f/4-6.3":"img/28.webp","28-75mm f/2.8":"img/29.webp","28-400mm f/4-8":"img/30.webp","70-180mm f/2.8":"img/31.webp","70-200mm f/2.8 S II":"img/32.webp","100-400mm f/4.5-5.6 S":"img/33.webp","180-600mm f/5.6-6.3":"img/34.webp"};
+var SIZE = { "35mm f/1.7": 46, "16-50mm f/2.8": 58, "50-250mm": 62, "FTZ II": 22, "26mm f/2.8": 18, "28mm f/2.8": 34, "35mm f/1.4": 58, "40mm f/2": 34, "50mm f/2.8": 46,
+  "50mm f/1.4": 58, "50mm f/1.8 S": 60, "85mm f/1.8 S": 70, "105mm f/2.8": 92, "14-30mm f/4 S": 60, "14-24mm f/2.8 S": 86, "24-50mm f/4-6.3": 38, "24-70mm f/2.8 S II": 92,
+  "24-120mm f/4 S": 80, "24-200mm f/4-6.3": 74, "28-75mm f/2.8": 80, "28-400mm f/4-8": 92, "70-180mm f/2.8": 100, "70-200mm f/2.8 S II": 104, "100-400mm f/4.5-5.6 S": 104, "180-600mm f/5.6-6.3": 104,
+  "Z9": 100, "Z8": 86, "Z7II": 75, "Z6III": 75, "Z5II": 75, "Z5II C": 66, "Zf": 75, "Zfc": 66, "Z50II": 66 };
+var HIGHLIGHTS = {"Z9":["Detects and tracks people, pets and birds","Keeps up with small, fast subjects","Focuses in near darkness"],"Z8":["Built for both photo and video","Very fast burst shooting","Pre-Release Capture saves the moment before you press the button"],"Z7II":["45.7 megapixel sensor","Wide dynamic range","Two card slots"],"Z6III":["Strong in low light","Pro-level video","Fast, reliable autofocus"],"Z5II":["Autofocus that recognizes your subject","Strong in low light","Bright viewfinder and built-in color presets"],"Z5II C":["Larger sensor for richer images","Simple, effortless handling"],"Zf":["Full-frame image quality","Strong in low light","Classic Nikon film-camera styling"],"Zfc":["Classic look with tactile dials","Modern Z series autofocus and image quality"],"Z50II":["Color presets at the press of a button","A clear step up from a phone","Small enough to carry everywhere"],"35mm f/1.7":["Close-up macro detail","Light and bright","Soft background blur"],"16-50mm f/2.8":["Bright f/2.8 through the whole zoom","Good in low light","Everyday zoom range"],"50-250mm":["Long reach for sports and wildlife","Image stabilization built in","Steady, precise autofocus"],"FTZ II":["Use Nikon DSLR lenses on Z cameras","Works with in-body stabilization","Weather sealed"],"26mm f/2.8":["The slimmest, lightest Z lens","Easy to carry everywhere","A natural fit for street photography"],"28mm f/2.8":["Small and light","Focuses close","Good in dim light"],"35mm f/1.4":["A walkaround lens for storytelling","Bright f/1.4 aperture","Smooth background blur"],"40mm f/2":["Small, light and easy to carry","Focuses close","Strong background separation"],"50mm f/2.8":["Life-size close-ups","Smooth background blur"],"50mm f/1.4":["Natural perspective","Smooth background blur","Works in any light"],"50mm f/1.8 S":["Exceptionally sharp","Fast, reliable autofocus"],"85mm f/1.8 S":["A classic portrait lens","Flattering perspective","Works with Eye-Detection AF"],"105mm f/2.8":["Life-size 1:1 macro","Very sharp","Vibration reduction built in"],"14-30mm f/4 S":["Ultra-wide zoom","Small for what it covers","Constant f/4 aperture"],"14-24mm f/2.8 S":["Ultra-wide f/2.8 zoom","Short and light for its class","Good in low light"],"24-50mm f/4-6.3":["Small and easy to carry","Even brightness edge to edge","Holds framing steady when focus changes"],"24-70mm f/2.8 S II":["Bright f/2.8 standard zoom","Fast, quiet autofocus","Strong color and sharpness"],"24-120mm f/4 S":["One zoom for travel, portraits and video","Constant f/4 aperture"],"24-200mm f/4-6.3":["One lens for wide to telephoto","Light for travel","Smooth, quiet autofocus"],"28-75mm f/2.8":["Bright f/2.8 at a lower price","Covers the most-used zoom range","Smooth background blur"],"28-400mm f/4-8":["All-in-one superzoom","Wide street shots to distant detail"],"70-180mm f/2.8":["Compact f/2.8 telephoto zoom","Smooth background blur","More detail in low light"],"70-200mm f/2.8 S II":["Lightest in its class","Built rugged for professional use","Customizable function buttons"],"100-400mm f/4.5-5.6 S":["Long reach that handles well","Vibration reduction keeps shots steady"],"180-600mm f/5.6-6.3":["Reach from 180mm to 600mm","Comfortable to shoot handheld"]};
+var IR_START = new Date(2026, 10, 2), IR_END = new Date(2026, 10, 29, 23, 59, 59);
+
+var ITEMS = [];
+LENSES.forEach(function (r) {
+  ITEMS.push({ shelf: r[0], pos: r[1], key: r[2], tag: r[3], full: r[4], rent: !!r[9],
+    cfgs: [{ label: "", price: r[5], ir: r[6], irCam: r[7], camWith: r[8], opts: [{ color: "", rk: r[10], rn: r[11] }] }] });
+});
+CAMERAS.forEach(function (r) {
+  ITEMS.push({ shelf: r[0], pos: r[1], key: r[2], tag: r[2], full: "Nikon " + r[2], rent: !!r[3], cam: true,
+    cfgs: r[4].map(function (c) { return { label: c[0], price: c[1], ir: c[2], irCam: 0, camWith: "", opts: c[3].map(function (o) { return { color: o[0], rk: o[1], rn: o[2] }; }) }; }) });
+});
+
+function irLive() { var n = new Date(); return n >= IR_START && n <= IR_END; }
+function money(n) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function whole(n) { return "$" + n.toLocaleString("en-US"); }
+function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function best(it) { var m = 0; if (irLive()) it.cfgs.forEach(function (c) { if (c.ir > m) m = c.ir; }); return m; }
+function lowest(it) { var m = Infinity; it.cfgs.forEach(function (c) { var p = c.price - (irLive() ? c.ir : 0); if (p < m) m = p; }); return m; }
+
+function stockLine(o) {
+  if (o.rk == null) return "Ask us about availability.";
+  if (o.rk > 0) return "In stock in Rocklin.";
+  if (o.rn > 0) return "Out of stock in Rocklin. In stock at our Reno store, and we can usually have it here the next day.";
+  return "Out of stock.";
+}
+
+function photo(it) {
+  var h = Math.max(46, Math.min(116, Math.round((SIZE[it.key] || 50) * 1.12)));
+  return '<img alt="" style="height:calc(' + h + 'px * var(--k))" src="' + PHOTOS[it.key] + '">';
+}
+
+function renderBay() {
+  var bay = document.getElementById("bay");
+  [1, 2, 3, 4].forEach(function (s) {
+    var spots = ITEMS.filter(function (it) { return it.shelf === s; }).sort(function (a, b) { return a.pos - b.pos; });
+    var row = el("div", "shelf"); row.style.gridTemplateColumns = "repeat(" + spots.length + ", minmax(0, 1fr))";
+    row.appendChild(el("div", "glass"));
+    spots.forEach(function (it, i) {
+      var b = el("button", "spot"); b.type = "button"; b.style.gridColumn = String(i + 1);
+      var on = el("span", "onstand"); on.innerHTML = photo(it); on.appendChild(el("span", "stand")); b.appendChild(on);
+      var hang = el("span", "hang"); hang.appendChild(el("span", "tag", it.tag));
+      if (best(it)) hang.appendChild(el("span", "chip", (it.cfgs.length > 1 ? "Save up to " : "Save ") + whole(best(it))));
+      if (it.rent) hang.appendChild(el("span", "chip rent", "Rental"));
+      b.appendChild(hang);
+      b.setAttribute("aria-label", it.full);
+      b.addEventListener("click", function () { openItem(it); });
+      row.appendChild(b);
+    });
+    bay.appendChild(row);
+  });
+}
+
+function detail(c) {
+  var d = el("div", "cfgdetail"), live = irLive(), s = live ? c.ir : 0;
+  if (s) d.appendChild(el("p", null, "Regular price " + money(c.price) + ", instant savings " + whole(s) + "."));
+  if (c.irCam && live) d.appendChild(el("p", null, "Buy it with " + c.camWith + " and the instant savings are " + whole(c.irCam) + ", for " + money(c.price - c.irCam) + "."));
+  c.opts.forEach(function (o) {
+    var p = el("p");
+    if (o.color) { p.appendChild(el("b", null, o.color + ": ")); }
+    p.appendChild(document.createTextNode(stockLine(o)));
+    d.appendChild(p);
+  });
+  return d;
+}
+
+function openItem(it) {
+  var card = document.getElementById("itemCard"); card.textContent = "";
+  var h = el("h2", null, it.full); h.id = "itemTitle"; card.appendChild(h);
+  var hl = HIGHLIGHTS[it.key];
+  if (hl) { var u = el("ul", "hl"); hl.forEach(function (t) { u.appendChild(el("li", null, t)); }); card.appendChild(u); }
+  var live = irLive(), list = el("div", "cfgs"), single = it.cfgs.length === 1;
+  it.cfgs.forEach(function (c, i) {
+    var s = live ? c.ir : 0, colors = c.opts.filter(function (o) { return o.color; }).map(function (o) { return o.color; }).join(", ");
+    var wrap = el("div", "cfg"), head = el(single ? "div" : "button", "cfghead");
+    var left = el("span", "c");
+    left.appendChild(document.createTextNode(c.label || (s ? "Price today" : "Price")));
+    if (colors) left.appendChild(el("span", "colors", colors));
+    head.appendChild(left); head.appendChild(el("span", "n", money(c.price - s)));
+    wrap.appendChild(head);
+    var d = detail(c); wrap.appendChild(d);
+    if (!single) {
+      head.type = "button"; d.hidden = i !== 0; head.setAttribute("aria-expanded", String(i === 0));
+      head.addEventListener("click", function () {
+        list.querySelectorAll(".cfgdetail").forEach(function (x) { x.hidden = true; });
+        list.querySelectorAll(".cfghead").forEach(function (x) { x.setAttribute("aria-expanded", "false"); });
+        d.hidden = false; head.setAttribute("aria-expanded", "true");
+      });
+    }
+    list.appendChild(wrap);
+  });
+  card.appendChild(list);
+  if (!single) card.appendChild(el("p", "note", "Tap an option to see if it is in stock."));
+  var facts = el("ul", "facts");
+  if (best(it)) facts.appendChild(el("li", null, "Instant savings end Nov 29."));
+  if (it.rent) facts.appendChild(el("li", null, "Available to rent. Ask us for rates and dates."));
+  if (facts.children.length) card.appendChild(facts);
+  card.appendChild(el("p", "assoc", it.cam ? "Want to try it? Ask an associate and we will put it in your hands." : "Questions, or want to try it on a camera? Ask an associate."));
+  var c = el("button", "close", "Close"); c.type = "button"; c.addEventListener("click", function () { document.getElementById("itemDlg").close(); }); card.appendChild(c);
+  var more = document.getElementById("moreDlg"); if (more.open) more.close();
+  var dlg = document.getElementById("itemDlg"); if (!dlg.open) dlg.showModal();
+}
+
+function renderMore() {
+  var list = document.getElementById("moreList");
+  ITEMS.filter(function (it) { return it.shelf === "N"; }).forEach(function (it) {
+    var b = el("button", "opt"); b.type = "button";
+    b.appendChild(el("span", null, it.full)); b.appendChild(el("span", "p", money(lowest(it))));
+    b.addEventListener("click", function () { openItem(it); });
+    list.appendChild(b);
+  });
+}
+
+// Idle screen: after 90 seconds without a touch, show the Nikon screen with a rolling strip of items and prices.
+var IDLE_MS = 90000, idleTimer = null;
+(function () {
+  var run = document.getElementById("ticker");
+  for (var k = 0; k < 2; k++) ITEMS.filter(function (it) { return it.shelf !== "N"; }).forEach(function (it) {
+    run.appendChild(el("b", null, it.full.replace("NIKKOR ", "")));
+    run.appendChild(document.createTextNode(" " + (it.cfgs.length > 1 ? "from " : "") + money(lowest(it)) + "\u2003\u2003"));
+  });
+})();
+function goIdle() {
+  ["itemDlg", "moreDlg"].forEach(function (id) { var d = document.getElementById(id); if (d.open) d.close(); });
+  document.getElementById("idle").hidden = false;
+}
+function wake() {
+  document.getElementById("idle").hidden = true;
+  clearTimeout(idleTimer); idleTimer = setTimeout(goIdle, IDLE_MS);
+}
+
+document.getElementById("asof").textContent = "Tap for more info";
+document.getElementById("moreBtn").addEventListener("click", function () { document.getElementById("moreDlg").showModal(); });
+document.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", function () { b.closest("dialog").close(); }); });
+document.querySelectorAll("dialog").forEach(function (d) { d.addEventListener("click", function (e) { if (e.target === d) d.close(); }); });
+document.getElementById("idle").addEventListener("click", wake);
+["pointerdown", "keydown", "scroll"].forEach(function (ev) { document.addEventListener(ev, function () { if (document.getElementById("idle").hidden) wake(); }, true); });
+renderBay(); renderMore(); wake();
+
+// Fit all four shelves on one screen: tag text keeps its size, photos and stands shrink or grow to use the height.
+function fit() {
+  var box = document.getElementById("bayBox"), bay = document.getElementById("bay"), ah = box.clientHeight;
+  if (!ah) return;
+  bay.style.minHeight = "0";
+  bay.style.setProperty("--k", "1"); var h1 = bay.offsetHeight;
+  bay.style.setProperty("--k", "0.5"); var h2 = bay.offsetHeight;
+  var per = (h1 - h2) / 0.5, fixed = h1 - per, k = per > 0 ? (ah - fixed) / per : 1;
+  bay.style.setProperty("--k", String(Math.max(0.4, Math.min(1.5, k))));
+  bay.style.minHeight = "";
+}
+fit(); window.addEventListener("resize", fit); window.addEventListener("load", fit);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+</script>
+
+</body>
+</html>
